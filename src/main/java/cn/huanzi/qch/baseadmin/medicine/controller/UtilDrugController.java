@@ -7,13 +7,11 @@ import cn.huanzi.qch.baseadmin.medicine.service.UtilDrugService;
 import cn.huanzi.qch.baseadmin.medicine.vo.CalculateDaysVo;
 import cn.huanzi.qch.baseadmin.medicine.vo.UtilDrugResultVo;
 import cn.huanzi.qch.baseadmin.medicine.vo.UtilDrugVo;
-import cn.huanzi.qch.baseadmin.wechat.wechatuser.controller.WechatUserController;
-import cn.huanzi.qch.baseadmin.wechat.wechatuser.vo.WechatUserVo;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

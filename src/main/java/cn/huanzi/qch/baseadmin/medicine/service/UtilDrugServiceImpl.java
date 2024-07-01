@@ -10,7 +10,6 @@ import cn.huanzi.qch.baseadmin.medicine.unit.DrugSpecParser;
 import cn.huanzi.qch.baseadmin.medicine.vo.CalculateDaysVo;
 import cn.huanzi.qch.baseadmin.medicine.vo.UtilDrugResultVo;
 import cn.huanzi.qch.baseadmin.medicine.vo.UtilDrugVo;
-import cn.huanzi.qch.baseadmin.wechat.wechatuser.vo.WechatUserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
