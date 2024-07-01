@@ -22,10 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.html.HTMLTableRowElement;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -174,7 +171,7 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
 
             for(int i = 0 ; i<listDrugSpec.size() ;i++){
                 double dosageQuantity = listDrugSpec.get(i).getQuantity();
-                if(dosageUnit.equals(listDrugSpec.get(i).getUnit())){
+                if(dosageUnit.equalsIgnoreCase(listDrugSpec.get(i).getUnit())){
                     for(int j = (i+1) ; j<listDrugSpec.size() ;j++){
                         dosageQuantity = dosageQuantity * listDrugSpec.get(j).getQuantity();
                     }
@@ -305,4 +302,14 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
 //        System.out.println("成功："+chenggong+",失败："+shibai+",无效:"+wuxiao);
 
     }
+
+
+
+        public static void main(String[] args) {
+            String str1 = "iu";
+            String str2 = "IU";
+
+            boolean isEqual = str1.equalsIgnoreCase(str2); // true，因为不考虑大小写的比较
+            System.out.println("字符串是否相等不考虑大小写: " + isEqual);
+        }
 }

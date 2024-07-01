@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class DrugSpecParser {
     private static final Pattern DRUG_SPEC_PATTERN =
-            Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|克|丸|毫克|丸|枚|s|包|贴|揿|ug|单位|喷|钦|揿)?[\\s\\S]*");
+            Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|丸|枚|s|包|贴|揿|ug|单位|喷|钦|揿)?[\\s\\S]*");
 
     public static DrugSpec parse(String spec) {
         Matcher matcher = DRUG_SPEC_PATTERN.matcher(spec.trim());
@@ -16,7 +16,7 @@ public class DrugSpecParser {
             String unit = matcher.group(3); // Group 3 corresponds to the unit capture group
             return new DrugSpec(quantity, unit);
         }
-        throw new IllegalArgumentException("药物规格格式无效!");
+        return null;
     }
 
     public List<DrugSpec> drugSpecList(String drug_specification) {
@@ -28,11 +28,17 @@ public class DrugSpecParser {
             for(String spec : specifications) {
                 if(spec.length()>1) {
                     DrugSpec drugSpec = parse(spec);
-                    System.out.println("药品规格=>数量: " + drugSpec.getQuantity() + ", 单位: " + drugSpec.getUnit());
-                    resultList.add(drugSpec);
+                    if(drugSpec!=null) {
+                        System.out.println("药品规格=>数量: " + drugSpec.getQuantity() + ", 单位: " + drugSpec.getUnit());
+                        resultList.add(drugSpec);
+                    }
                 }
             }
-            return resultList;
+            if(resultList.size()>0) {
+                return resultList;
+            }else{
+                throw new IllegalArgumentException("药品规格格式无效!");
+            }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("药品规格格式无效!");
         }
@@ -43,7 +49,7 @@ public class DrugSpecParser {
     public static void main(String[] args) throws Exception{
         String input= "汉字10.0mlasdf";
         Pattern sccc =
-                Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|克|丸|毫克|丸|枚|s|包|贴|揿|ug|单位)?[\\s\\S]*");
+                Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|丸|枚|s|包|贴|揿|ug|单位)?[\\s\\S]*");
 
         Matcher matcher = sccc.matcher(input.trim());
         if (matcher.matches()) {
