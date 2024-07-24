@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class DrugSpecParser {
     private static final Pattern DRUG_SPEC_PATTERN =
-            Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|毫升|丸|枚|s|包|贴|揿|ug|单位|喷|钦|揿)?[\\s\\S]*");
+            Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|毫升|丸|枚|s|包|贴|揿|ug|单位|喷|钦|揿|吸|张|U|μg|万)?[\\s\\S]*");
 
     public static DrugSpec parse(String spec) {
         Matcher matcher = DRUG_SPEC_PATTERN.matcher(spec.trim());
@@ -49,7 +49,7 @@ public class DrugSpecParser {
     public static void main(String[] args) throws Exception{
         String input= "汉字10.0mlasdf";
         Pattern sccc =
-                Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|毫升|丸|枚|s|包|贴|揿|ug|单位)?[\\s\\S]*");
+                Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]*(\\d+(\\.\\d+)?)\\s*(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|iu|克|丸|毫克|毫升|丸|枚|s|包|贴|揿|ug|单位|吸|张|U|μg|万)?[\\s\\S]*");
 
         Matcher matcher = sccc.matcher(input.trim());
         if (matcher.matches()) {
