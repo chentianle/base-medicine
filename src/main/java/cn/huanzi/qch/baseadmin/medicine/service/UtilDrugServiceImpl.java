@@ -136,6 +136,31 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         condition.setDosage(dosage);
     }
 
+  /**
+     * 规格转换
+     * @param condition
+     */
+    public void dataConvert(CalculateDaysVo condition) throws IllegalArgumentException{
+
+        //药品规格
+        String specification = condition.getSpecification();
+        //药品用品用量
+        String dosage = condition.getDosage();
+
+        if(specification.contains("mg") && dosage.contains("g")){
+            try {
+                DosageSpec dosageSpec = new DosageParser().dosageChuli(condition.getDosage());
+                dosage = dosage.replace("g","mg");
+                dosage = dosage.replace(dosageSpec.getPillsPerTime()+"",dosageSpec.getPillsPerTime()*1000+"");
+            }catch (Exception e){}
+        }
+
+
+
+        condition.setSpecification(specification);
+        condition.setDosage(dosage);
+    }
+
 
     @Override
     public UtilDrugResultVo calculateDaysV2(CalculateDaysVo condition) throws Exception {
@@ -143,6 +168,9 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         try {
             //数据清洗
             this.dataClean(condition);
+            //规格转换
+            this.dataConvert(condition);
+
 
             //解决用法用量适量的问题
             if(condition.getDosage()!=null && condition.getDosage().contains("适量")){
