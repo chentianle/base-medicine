@@ -111,6 +111,9 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
 
         //药品规格清洗
         String specification = condition.getSpecification();
+
+        specification = specification.replaceAll("\\(.*?\\)", "");
+
         specification = specification.replaceAll("\\(","").replaceAll("\\)","");
         specification = specification.replaceAll("（","").replaceAll("）","");
         specification = specification.replaceAll("：","*").replaceAll(":","*").replaceAll("x","*").replaceAll("×","*").
@@ -118,13 +121,21 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         specification = specification.replaceAll("ML","ml").replaceAll("毫克","mg").replaceAll("克","g").
                 replaceAll("1滴","0.4ml").replaceAll("S","s").replaceAll("μg","ug");
 
+        if(specification.contains("cm") && !specification.contains("cm*")){
+            specification = specification.replaceAll("cm","cm*");
+        }
+        if(specification.contains("单位") && !specification.contains("单位*")){
+            specification = specification.replaceAll("单位","单位*");
+        }
+
         //药品用品用量清洗
         String dosage = condition.getDosage();
-            dosage = dosage.replaceAll("毫克", "mg").replaceAll("克", "g").replaceAll("1滴", "0.4ml");
+            dosage = dosage.replaceAll("毫克", "mg").replaceAll("克", "g").replaceAll("1滴", "0.4ml").replaceAll("ML","ml").replaceAll("μg","ug")
+            .replaceAll("快","块");
         if(!specification.contains("毫升")) {
             dosage = dosage.replaceAll("毫升", "ml");
         }
-        if(specification.contains("s")){
+        if(specification.contains("s") && !specification.contains("se")){
             dosage = dosage.replaceAll("粒","s").replaceAll("丸","s").replaceAll("片","s").replaceAll("枚","s").replaceAll("贴","s");
         }
         String hebing = dosage + specification;
@@ -147,7 +158,7 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         //药品用品用量
         String dosage = condition.getDosage();
 
-        if(specification.contains("mg") && dosage.contains("g")){
+        if(specification.contains("mg") && dosage.contains("g") && !dosage.contains("mg")){
             try {
                 DosageSpec dosageSpec = new DosageParser().dosageChuli(condition.getDosage());
                 dosage = dosage.replace("g","mg");
@@ -155,7 +166,17 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
             }catch (Exception e){}
         }
 
-
+        if(specification.contains("g") && dosage.contains("mg") && !specification.contains("mg")){
+            try {
+                List<DrugSpec> listDrugSpec = new DrugSpecParser().drugSpecList(condition.getSpecification());
+                for(DrugSpec drugSpec : listDrugSpec){
+                    if(drugSpec.getUnit().equals("g")){
+                        specification = specification.replace("g","mg");
+                        specification = specification.replace(drugSpec.getQuantity()+"",drugSpec.getQuantity()*1000+"");
+                    }
+                }
+            }catch (Exception e){}
+        }
 
         condition.setSpecification(specification);
         condition.setDosage(dosage);
