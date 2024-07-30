@@ -111,13 +111,19 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
 
         //药品规格清洗
         String specification = condition.getSpecification();
+        try {
+            //有公式的参与计算公式
+            specification = new DrugSpecParser().kuohaoContent(specification);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
 
         specification = specification.replaceAll("\\(.*?\\)", "");
 
         specification = specification.replaceAll("\\(","").replaceAll("\\)","");
         specification = specification.replaceAll("（","").replaceAll("）","");
         specification = specification.replaceAll("：","*").replaceAll(":","*").replaceAll("x","*").replaceAll("×","*").
-                replaceAll(",","*").replaceAll("%","*").replaceAll("X","*").replaceAll("\\+","*");
+                replaceAll(",","*").replaceAll("%","*").replaceAll("X","*").replaceAll("\\+","*").replaceAll("/","*");
         specification = specification.replaceAll("ML","ml").replaceAll("毫克","mg").replaceAll("克","g").
                 replaceAll("1滴","0.4ml").replaceAll("S","s").replaceAll("μg","ug");
 
@@ -177,8 +183,15 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
                 }
             }catch (Exception e){}
         }
-
+        if(specification.contains("mg") && dosage.contains("ml") && !dosage.contains("mg")){
+            dosage = dosage.replace("ml","mg");
+        }
         condition.setSpecification(specification);
+
+        //20mg10支 转换为20mg10支
+        String zhuanhuanStr  = new DrugSpecParser().guigezhuanhuan(specification);
+        condition.setSpecification(zhuanhuanStr);
+
         condition.setDosage(dosage);
     }
 
