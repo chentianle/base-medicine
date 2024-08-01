@@ -119,11 +119,14 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         }
 
         specification = specification.replaceAll("\\(.*?\\)", "");
+        specification = specification.replaceAll("（.*?）", "");
 
         specification = specification.replaceAll("\\(","").replaceAll("\\)","");
         specification = specification.replaceAll("（","").replaceAll("）","");
         specification = specification.replaceAll("：","*").replaceAll(":","*").replaceAll("x","*").replaceAll("×","*").
-                replaceAll(",","*").replaceAll("%","*").replaceAll("X","*").replaceAll("\\+","*").replaceAll("/","*");
+                replaceAll(",","*").replaceAll("%","*").replaceAll("X","*").replaceAll("\\+","*").
+                replaceAll("/","*").replaceAll(";","*").replaceAll("；","*").
+                replaceAll(" ","");
         specification = specification.replaceAll("ML","ml").replaceAll("毫克","mg").replaceAll("克","g").
                 replaceAll("1滴","0.4ml").replaceAll("S","s").replaceAll("μg","ug");
 
@@ -188,7 +191,7 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         }
         condition.setSpecification(specification);
 
-        //20mg10支 转换为20mg10支
+        //20mg10支 转换为20mg*10支
         String zhuanhuanStr  = new DrugSpecParser().guigezhuanhuan(specification);
         condition.setSpecification(zhuanhuanStr);
 
