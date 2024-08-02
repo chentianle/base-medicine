@@ -189,8 +189,13 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         if(specification.contains("mg") && dosage.contains("ml") && !dosage.contains("mg")){
             dosage = dosage.replace("ml","mg");
         }
+        if(specification.contains("包") && dosage.contains("袋") && !dosage.contains("包")){
+            dosage = dosage.replace("袋","包");
+        }
+        if(dosage.contains("包") && specification.contains("袋") && !specification.contains("包")){
+            specification = specification.replace("袋","包");
+        }
         condition.setSpecification(specification);
-
         //20mg10支 转换为20mg*10支
         String zhuanhuanStr  = new DrugSpecParser().guigezhuanhuan(specification);
         condition.setSpecification(zhuanhuanStr);
