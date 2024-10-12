@@ -19,5 +19,4 @@ target
 /logs/
 *.log
 /.idea/
-.idea
 **/bootstrap.yml
