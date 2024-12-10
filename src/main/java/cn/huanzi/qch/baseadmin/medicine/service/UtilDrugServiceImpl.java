@@ -44,66 +44,6 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
     public UtilDrugResultVo calculateDays(CalculateDaysVo condition) throws Exception {
 
         UtilDrugResultVo resultVo = new UtilDrugResultVo();
-
-
-//        UtilDrugVo queryVo = new UtilDrugVo();
-//        queryVo.setDrugNameComm(condition.getDrug_name());
-//        Result<List<UtilDrugVo>> utilDrugList = super.list(queryVo);
-//        if(utilDrugList!=null) {
-//            if(utilDrugList.getData() !=null && utilDrugList.getData().size()>0){
-//
-//                List<UtilDrugVo> listdrug = utilDrugList.getData();
-//                boolean specificationFlag = false;
-//                for(UtilDrugVo vo : listdrug){
-//                    if(vo.getDrugSpecification().equals(condition.getSpecification())){
-//                        specificationFlag = true;
-//                        break;
-//                    }
-//                }
-//                if(!specificationFlag){
-//                    throw new Exception("药品："+condition.getDrug_name()+"，不存在规格："+condition.getSpecification()+"，请修改！");
-//                }
-//                try {
-//                    //解析药品用法用量
-//                    DosageSpec dosageSpec = new DosageParser().dosageChuli(condition.getDosage());
-//                    //解析药品规格
-//                    List<DrugSpec> listDrugSpec = new DrugSpecParser().drugSpecList(condition.getSpecification());
-//
-//                    String dosageUnit = dosageSpec.getUnit();
-//
-//                    //每日总用量
-//                    double dosageAll = dosageSpec.getPillsPerTime() * dosageSpec.getTimesPerDay();
-//
-//                    //最小单位总数
-//                    double quantityAll = 0;
-//
-//                    for(int i = 0 ; i<listDrugSpec.size() ;i++){
-//                        double dosageQuantity = listDrugSpec.get(i).getQuantity();
-//                        if(dosageUnit.equals(listDrugSpec.get(i).getUnit())){
-//                            for(int j = (i+1) ; j<listDrugSpec.size() ;j++){
-//                                dosageQuantity = dosageQuantity * listDrugSpec.get(j).getQuantity();
-//                            }
-//                            quantityAll = dosageQuantity * condition.getQuantity();
-//                            break;
-//                        }
-//                    }
-//                    if(quantityAll<=0){
-//                        throw new Exception("药品规格和药品用法用量没有对应关系");
-//                    }
-//
-//                    resultVo.setDays( (int) Math.round(quantityAll/dosageAll));
-//                    resultVo.setMessage("计算成功！");
-//                    resultVo.setType("是");
-//                }catch (Exception e) {
-//                    throw new Exception(e.getMessage());
-//                }
-//
-//            }else{
-//                throw new Exception("没有查询到:"+condition.getDrug_name()+"，药品！");
-//            }
-//        }else{
-//            throw new Exception("没有查询到:"+condition.getDrug_name()+"，药品！");
-//        }
         return resultVo;
     }
 
@@ -184,7 +124,19 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
                 }
             }
             if(quantityAll<=0){
-                throw new Exception("药品规格和药品用法用量没有对应关系");
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.append("药品规格:");
+                String guige = "";
+                for(int i = 0 ; i<listDrugSpec.size() ;i++){
+                    guige = guige + listDrugSpec.get(i).getUnit() +",";
+                }
+                if(!guige.equals("")){
+                    guige = guige.substring(0,guige.length()-1);
+                }
+                stringBuffer.append("'"+guige);
+                stringBuffer.append("'和药品用法用量'"+dosageUnit);
+                stringBuffer.append("'没有对应关系");
+                throw new Exception(stringBuffer.toString());
             }
             resultVo.setCalculateDaysVo(condition);
             resultVo.setDays( (int) Math.round(quantityAll/dosageAll));
@@ -195,8 +147,6 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
         }
         return resultVo;
     }
-
-
     /**
      * 批量计算
      * @param excel
@@ -270,7 +220,6 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
                     cell.setCellValue("药品名称|规格|用法用量为空");
                 }
             }
-
         }catch (Exception io){
             System.out.println(io.toString());
         }finally {
@@ -286,24 +235,5 @@ public class UtilDrugServiceImpl extends CommonServiceImpl<UtilDrugVo, UtilDrug,
             response.getOutputStream().flush();
             response.getOutputStream().close();
         }
-//        Integer wuxiao = 0 ;
-//        Integer chenggong = 0;
-//        Integer shibai = 0;
-//        for(CalculateDaysVo daysVo : data){
-//            if(StringUtils.isNotEmpty(daysVo.getSpecification()) && StringUtils.isNotEmpty(daysVo.getDosage())){
-//                try {
-//                    UtilDrugResultVo resultVo = this.calculateDaysV2(daysVo);
-//                    chenggong = chenggong+1;
-//                }catch (Exception e){
-//                    shibai = shibai+1;
-//                    System.out.println(e);
-//                }
-//
-//            }else{
-//                wuxiao = wuxiao+1;
-//            }
-//        }
-//        System.out.println("成功："+chenggong+",失败："+shibai+",无效:"+wuxiao);
-
     }
 }

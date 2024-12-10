@@ -126,7 +126,6 @@ public class CaptchaFilterConfig implements Filter {
                         log.info("AES的key：" + key);
                         log.info("需要加密的data数据：" + dataString);
                         String data = AesUtil.encrypt(dataString, key);
-
                         //用前端的公钥来解密AES的key，并转成Base64
                         String aesKey = Base64.encodeBase64String(RsaUtil.encryptByPublicKey(key.getBytes(), publicKey));
                         dataString = "{\"data\":{\"data\":\"" + data + "\",\"aesKey\":\"" + aesKey + "\"}}";
