@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class DosageParser {
     public DosageSpec dosageChuli(String input) throws Exception{
-        String pattern = "\\s*(\\d+)次[\\s\\S]*次(\\d+(\\.\\d+)?)(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|包|克|喷|丸|毫克|丸|枚|s|贴|揿|ug|单位|钦)";
+        String pattern = "\\s*(\\d+)次[\\s\\S]*次(\\d+(\\.\\d+)?)(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|包|克|喷|毫克|丸|枚|s|贴|揿|ug|单位|钦|毫升)";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(input);
         if (m.find()) {
@@ -15,7 +15,7 @@ public class DosageParser {
             System.out.println("用法用量=》频次：" + timesPerDay+"，数量："+pillsPerTime+"，单位："+ unit);
             return new DosageSpec(timesPerDay,pillsPerTime,unit);
         }
-        String patternV1 = "\\s*次(\\d+(\\.\\d+)?)(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|包|克|喷|丸|毫克|丸|枚|s|贴|揿|ug|单位|钦)[\\s\\S]*(\\d+)次";
+        String patternV1 = "\\s*次(\\d+(\\.\\d+)?)(ml|g|cl|mg|片|瓶|支|板|粒|片/盒|S|袋|IU|包|克|喷|毫克|丸|枚|s|贴|揿|ug|单位|钦|毫升)[\\s\\S]*(\\d+)次";
         Pattern rV1 = Pattern.compile(patternV1);
         Matcher mV1 = rV1.matcher(input);
         if (mV1.find()) {
